@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-namespace BoilerPlate{
+namespace Ui_plugin_radio_gaga{
 
    export class  Control extends BaseControl {
     
