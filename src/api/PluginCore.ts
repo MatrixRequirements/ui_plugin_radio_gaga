@@ -11,8 +11,7 @@ namespace Ui_plugin_radio_gaga  {
         fieldId?:number,
         valueChanged?: () => unknown, 
         parameter?: IPluginUi_plugin_radio_gagaFieldParameter, /** @Francois: this should be this I think */
-        fieldValue?:unknown, // value as stored in DB
-        fieldValueJSON?:unknown, // same as json (if value is a JSON object)
+        fieldValue?:string, // value as stored in DB
         isItem?:boolean,
         item?:IItem,
         isForm?:boolean,

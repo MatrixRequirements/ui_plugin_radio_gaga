@@ -49,20 +49,19 @@ namespace Ui_plugin_radio_gaga{
 
             // get (default) configuration + a field value
             this.settings = <IControlOptions> ml.JSON.mergeOptions(Control.defaultOptions, options);
-            // have default values
-            if (!this.settings.fieldValue && this.settings.parameter.initialContent && !this.settings.item ) {
-                this.settings.fieldValue =  this.settings.parameter.initialContent;
-            }
+            
+            this.originalValue = "";
 
-            // remember the value when rendering the editor
-            if (this.settings.fieldValueJSON && (<IGaga>this.settings.fieldValue).id) {
-                this.originalValue = (<IGaga>this.settings.fieldValue).id;
+            // if it has been saved before get the value
+            if (this.settings.fieldValue && (<IGaga>JSON.parse(this.settings.fieldValue)).id) {
+                this.originalValue =  (<IGaga>JSON.parse(this.settings.fieldValue)).id;
             }
 
             // check if there's a default value which should be used
             let currentValue =  this.originalValue;
+
             // if there is no value saved, initialize it - if default is provided
-            if (this.settings.parameter.initialContent && !currentValue) {
+            if (!currentValue && this.settings.parameter.initialContent && this.settings.parameter.initialContent.id) {
                 currentValue = this.settings.parameter.initialContent.id;
             }
 
