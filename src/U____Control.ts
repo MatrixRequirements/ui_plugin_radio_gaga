@@ -36,6 +36,7 @@ namespace Ui_plugin_radio_gaga{
 
                 control.append(`<label><input type="radio" ${disabled?"disabled":""} id="${name+option.id}" name="${name}" ${checked}>${option.text}</label>`);            
             }
+            return control;
         }
        
         constructor( control:JQuery) {
