@@ -78,7 +78,7 @@ namespace Ui_plugin_radio_gaga {
                     label: "ui_plugin_radio_gaga-field",
                 },
                 defaultParameters: {
-                    myParameter:  "default value for setting defined in Interfaces.ts",
+                    options: [{id:"l00",text:"first option"},{id:"l01",text:"second option"},]
                 }
             },
             /*  Add a dashboard inside a project - set enabled to false if not needed.
