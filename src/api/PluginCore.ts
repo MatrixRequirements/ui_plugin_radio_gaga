@@ -142,14 +142,7 @@ namespace Ui_plugin_radio_gaga  {
         updateMenu(ul: JQuery, hook: number) {
 
             if (Plugin.config.menuToolItem.enabled && this.enableToolMenu(ul,hook) )  {
-                const m = new Tool();
-                if ( m.showMenu( app.getCurrentItemId() )) {
-                    const li = $(`<li><a>${Plugin.config.menuToolItem.title}</a></li>`).on("click", () => {
-                        const m = new Tool();
-                        m.menuClicked(app.getCurrentItemId());
-                    });
-                    ul.append(li);
-                }
+                
             }  
         }
 
@@ -188,24 +181,7 @@ namespace Ui_plugin_radio_gaga  {
             return this.enabledInContext;
         }
         getProjectSettingPages(): ISettingPage[] {
-            const pbpi = ProjectSettingsPage();
-            if (!this.enableProjectSetting() || !Plugin.config.projectSettingsPage.enabled) {
-                return [];
-            } else { 
-                return [<ISettingPage>
-                    {
-                        id: Plugin.config.projectSettingsPage.id,
-                        title: Plugin.config.projectSettingsPage.title,
-                        type:Plugin.config.projectSettingsPage.id,
-                        render: (_ui: JQuery) => {
-                            pbpi.renderSettingPage();
-                        },
-                        saveAsync: () => {
-                            return pbpi.saveAsync();
-                        },
-                    },
-                ];
-            }
+            return []
         }
         
 
@@ -216,23 +192,7 @@ namespace Ui_plugin_radio_gaga  {
         }
 
         getCustomerSettingPages(): ISettingPage[] {
-            const pbpi = ServerSettingsPage();
-            if (!this.enableServerSetting() || !Plugin.config.customerSettingsPage.enabled) {
-                return [];
-            } else {
-                return [<ISettingPage> {
-                        id: Plugin.config.customerSettingsPage.id,
-                        title: Plugin.config.customerSettingsPage.title,
-                         type:Plugin.config.projectSettingsPage.id,
-                        render: (_ui: JQuery) => {
-                            pbpi.renderSettingPage();
-                        },
-                        saveAsync: () => {
-                            return pbpi.saveAsync();
-                        },
-                    },
-                ];
-            }
+            return []
         }
 
          // ------------------------------------------------ project dashboard / or folder dashboard  ------------------------------------------------
@@ -252,8 +212,7 @@ namespace Ui_plugin_radio_gaga  {
                     icon: Plugin.config.dashboard.icon,
                     usesFilters: true,
                     render: (_options: IPluginPanelOptions) => {
-                        const gd = new DashboardPage();
-                        gd.renderProjectPage();
+                       
                     },
                 });
            }

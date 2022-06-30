@@ -61,7 +61,6 @@ namespace Ui_plugin_radio_gaga {
             field: {
                 enabled: true,
                 fieldType: "ui_plugin_radio_gaga",
-                defaultValue: "Default value",
                 title: "ui_plugin_radio_gaga-field",
                 fieldConfigOptions: {
                     id: "ui_plugin_radio_gaga",
