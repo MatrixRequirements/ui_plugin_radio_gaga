@@ -34,7 +34,7 @@ namespace Ui_plugin_radio_gaga{
             for( let option of this.settings.parameter.options) {  
                 let checked = (option.id == currentValue)?"checked":"";
 
-                control.append(`<label><input type="radio" ${disabled?"disabled":""} id="${name+option.id}" name="${name}" ${checked}>${option.text}</label>`);            
+                control.append(`<div><label><input type="radio" data-option="${option.id}" ${disabled?"disabled":""} id="${name+option.id}" name="${name}" ${checked}>${option.text}</label></div>`);            
             }
             return control;
         }
@@ -97,7 +97,7 @@ namespace Ui_plugin_radio_gaga{
         
         /** this method is called by the UI to retrieve the string to be saved in the database */
         getValue():string {
-            let checked = $('input:checked', this.editor).prop("id");
+            let checked = $('input:checked', this.editor).data("option");
             let current = <IGaga>{ id:checked };
             return JSON.stringify(current);
         }
