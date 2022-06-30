@@ -75,9 +75,6 @@ namespace Ui_plugin_radio_gaga {
                     class: "",
                     help: "",
                     label: "ui_plugin_radio_gaga-field",
-                },
-                defaultParameters: {
-                    options: [{id:"l00",text:"first option"},{id:"l01",text:"second option"},]
                 }
             },
             /*  Add a dashboard inside a project - set enabled to false if not needed.

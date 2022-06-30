@@ -17,7 +17,8 @@ namespace Ui_plugin_radio_gaga{
                 readonly: false, // can be set to overwrite the default readonly status
                 allowResize: true, // allow to resize control
                 hideFullscreen:false, //  hide fullscreen
-                options:[]
+                // add other default values
+                options:[{id:"l00",text:"first option"},{id:"l01",text:"second option"}]
             }
         };
         // render the control with the current value

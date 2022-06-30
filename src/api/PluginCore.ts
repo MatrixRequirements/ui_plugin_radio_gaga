@@ -73,8 +73,6 @@ namespace Ui_plugin_radio_gaga  {
     export interface IPluginFeatureField extends IPluginFeatureBase {
         /**  Field type id that will be use when rendering the data */
         fieldType: string,
-        /**  default field Parameters*/
-        defaultParameters: IPluginUi_plugin_radio_gagaFieldParameter,
         /**  description of  field  capabilities*/
         fieldConfigOptions: IFieldDescription,
         /* @francois removed this */
@@ -140,10 +138,7 @@ namespace Ui_plugin_radio_gaga  {
         
         // by default plugins add none or one item to the tool menu of displayed items. This class can be overwritten if needed
         updateMenu(ul: JQuery, hook: number) {
-
-            if (Plugin.config.menuToolItem.enabled && this.enableToolMenu(ul,hook) )  {
-                
-            }  
+            // et alors?
         }
 
         // ------------------------------------------------ control (fields) implementation ------------------------------------------------
@@ -203,20 +198,7 @@ namespace Ui_plugin_radio_gaga  {
 
         getProjectPages(): IProjectPageParam[] {
             const pages: IProjectPageParam[] = [];
-            if (Plugin.config.dashboard.enabled) {
-                pages.push({
-                    id: Plugin.config.dashboard.id,
-                    title: Plugin.config.dashboard.title,
-                    folder: Plugin.config.dashboard.parent,
-                    order: Plugin.config.dashboard.order,
-                    icon: Plugin.config.dashboard.icon,
-                    usesFilters: true,
-                    render: (_options: IPluginPanelOptions) => {
-                       
-                    },
-                });
-           }
-               
+          
             return pages;
         }
 
