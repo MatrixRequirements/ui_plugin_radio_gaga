@@ -32,8 +32,31 @@ namespace Ui_plugin_radio_gaga {
     */
 
     export interface IPluginUi_plugin_radio_gagaFieldParameter extends IFieldParameter {
-        /** example field parameter */
-        myParameter: string;
+
+        /** the definition of each line */
+        options: IGagaOption[];
+        /** to store the initial selected value */
+        initialContent?:IGaga;
+    }
+    
+
+    /** definition of one line of the control */
+    export interface IGagaOption  {
+        /**  id of the line should be 'l' and 2 digit number l00, l01, l02 */
+        id: string;
+        /**  display text in UI / documents*/
+        text: string;
+    }
+
+
+    /** Value stored in field 
+    * 
+    * This defines the value of the control as stored in the database
+    */
+
+    export interface IGaga extends IFieldParameter {
+        /** id of the selected option - if any */
+        id: string;
     }
 
   

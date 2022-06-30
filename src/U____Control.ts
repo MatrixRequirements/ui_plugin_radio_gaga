@@ -4,16 +4,37 @@ namespace Ui_plugin_radio_gaga{
    export class  Control extends BaseControl {
     
         private settings: IControlOptions;
-        private lastValueChanged:number;
-        private _editor:JQuery;
-        private doesRequireContent = false;
-        private defaultValue = Plugin.config.field.defaultValue; 
-
+        private originalValue:string;
+        private editor:JQuery;
        
-        createEditorFromDOM(): JQuery {
-            return $(`<div>
-                        <pre>${JSON.stringify(this.settings)}</pre>
-                    <div> `);
+        static defaultOptions:IControlOptions = {
+            placeholder: "",
+            controlState: ControlState.FormView, // read only rendering
+            canEdit: false, // whether data can be edited 
+            dummyData: false, // fill control with a dummy text (for form design...)
+            valueChanged: () => console.debug("Value has changed"), // callback to call if value changes
+            parameter: {
+                readonly: false, // can be set to overwrite the default readonly status
+                allowResize: true, // allow to resize control
+                hideFullscreen:false, //  hide fullscreen
+                options:[]
+            }
+        };
+        // render the control with the current value
+        createEditorFromDOM(currentValue:string, disabled:boolean): JQuery {
+            if (this.settings.parameter.options.length == 0) {
+                return $(`<div>No options defined<div> `);
+            }
+            let control = $(`<div>`);
+            // get the name for the radio
+            let name = "f" + this.settings.fieldId;
+        
+            // render all the lines (currently in the setting)    
+            for( let option of this.settings.parameter.options) {  
+                let checked = (option.id == currentValue)?"checked":"";
+
+                control.append(`<label><input type="radio" ${disabled?"disabled":""} id="${name+option.id}" name="${name}" ${checked}>${option.text}</label>`);            
+            }
         }
        
         constructor( control:JQuery) {
@@ -22,128 +43,79 @@ namespace Ui_plugin_radio_gaga{
         
        
         init(  options:IControlOptions) {
-            const defaultOptions:IControlOptions = {
-                placeholder: Plugin.config.field.title,
-                controlState: ControlState.FormView, // read only rendering
-                canEdit: false, // whether data can be edited 
-                dummyData: false, // fill control with a dummy text (for form design...)
-                valueChanged: () => console.debug("Value has changed"), // callback to call if value changes
-                parameter: {
-                    readonly: false, // can be set to overwrite the default readonly status
-                    allowResize: true, // allow to resize control
-                    hideFullscreen:false //  hide fullscreen
-                }
-            };
-            this.settings = <IControlOptions> ml.JSON.mergeOptions(defaultOptions, options);
+            let that = this;
+
+            // get (default) configuration + a field value
+            this.settings = <IControlOptions> ml.JSON.mergeOptions(Control.defaultOptions, options);
             // have default values
             if (!this.settings.fieldValue && this.settings.parameter.initialContent && !this.settings.item ) {
                 this.settings.fieldValue =  this.settings.parameter.initialContent;
             }
-            if (typeof this.settings.fieldValue === 'undefined' || this.settings.fieldValue === "") {
-                this.settings.fieldValue = this.defaultValue;
+
+            // remember the value when rendering the editor
+            if (this.settings.fieldValueJSON && (<IGaga>this.settings.fieldValue).id) {
+                this.originalValue = (<IGaga>this.settings.fieldValue).id;
             }
-            //For print        
-            if (this.settings.controlState === ControlState.Print || this.settings.controlState === ControlState.Tooltip) {
-                this._root.append(super.createHelp(this.settings));
-                this._root.append(`<pre>${this.settings.fieldValue}></pre>`);
-                return;
+
+            // check if there's a default value which should be used
+            let currentValue =  this.originalValue;
+            // if there is no value saved, initialize it - if default is provided
+            if (this.settings.parameter.initialContent && !currentValue) {
+                currentValue = this.settings.parameter.initialContent.id;
+            }
+
+            // figure out if control should be editable
+            let disabled = false;
+            if ( // readonly display //
+                this.settings.controlState === ControlState.Print || this.settings.controlState === ControlState.Tooltip|| this.settings.controlState === ControlState.HistoryView 
+                || !this.settings.canEdit /* no rights to edit */
+                || this.settings.parameter.readonly /* disabled in admin*/ ) {
+                disabled = true;
             }
     
-            if (options.parameter && options.parameter.requiresContent) {
-                this.doesRequireContent = options.parameter.requiresContent;
-            }
-            const helpLine = super.createHelp(this.settings);
-            this._root.append(helpLine);
-            const ctrlContainer = $("<div>").addClass("baseControl");
+            // render the control
+            this._root.append( super.createHelp(this.settings)); // render name of 
+            const container = $("<div class='baseControl'>").appendTo( this._root ); // create a container
+            this.editor = this.createEditorFromDOM(currentValue, disabled).appendTo( container ); // the actual UI
             
-            this._root.append(ctrlContainer);
-            this._editor = this.createEditorFromDOM();
-          
-            ctrlContainer.append(this._editor);
-            
-            this._editor.val(<string>this.settings.fieldValue);
-    
-            // remove mouseout to avoid frequent changes change
-            this._editor.change( ()=> {
-                clearTimeout(this.lastValueChanged);
-                console.log(`${Plugin.config.field.fieldType} has changed`)
-                this.lastValueChanged = window.setTimeout((noCallBack?:boolean) => this.valueChanged(noCallBack), 333);
+            // react on changes to the value. the ui will pass a call function which will enable/disable the save 
+            $('input', this.editor).change(function() {
+                that.settings.valueChanged.apply(null);
             });
-            this._editor.on('blur',  () => {
-                if (this.settings.focusLeft) {
-                    this.settings.focusLeft();
-                }
-                
-            });
-            const rt = this._editor.val();
-            this._root.data("original", rt);
-            this._root.data("new", rt);
+
         }
         
-        // public interface 
+        /** this method is called by the UI to figure out if the control's value changed */
         hasChanged():boolean {
-            // make sure no changes are pending
-            clearTimeout(this.lastValueChanged);
-            // this will take and text from the editor and put it in the variable  _root.data("new")
-            // but it will not recursively trigger a change
-            this.valueChanged(true);
-            // now compare
-            return  this._root.data("original") !== this._root.data("new");
+           
+            let current = this.getValue();
+            
+            return  (<IGaga>JSON.parse(current)).id != this.originalValue;
         }
         
+        /** this method is called by the UI to retrieve the string to be saved in the database */
         getValue():string {
-            // make sure no changes are pending
-            clearTimeout(this.lastValueChanged);
-            this.valueChanged(true);
-            const text = this._root.data("new");
-            return DOMPurify.sanitize(text);
+            let checked = $('input:checked', this.editor).prop("id");
+            let current = <IGaga>{ id:checked };
+            return JSON.stringify(current);
         }
     
-        requiresContent() {
-            return this.doesRequireContent;
-        }
-       test(first,second)
-       {
-           console.log(first, second);
-       }
-       refresh() {
+        refresh() {
            console.log("Refresh has been called");
         }
         setValue(newValue:string, reset?:boolean) {
-            if (this._editor) {
-                this._editor.val(newValue);
-            }
-    
-            this._root.data("new", newValue);
-            if (reset) {
-                this._root.data("original", newValue);
-            }
+            console.log("this could be called from the outside to force a change of value");
         }
     
         destroy () {
-            if ( this._editor ) {
-                this._editor.off();
-                this._editor = null;
+            if ( this.editor ) {
+                this.editor = null;
             }
         }
         
        resizeItem() {
            console.log("resizeItem has been called");
         }
-        
-        //  private functions
-        private valueChanged(noCallback?:boolean) {
-            if (this._editor) {
-                this._root.data("new", this._editor.val());
-            }
-            if (this.settings.valueChanged && !noCallback ) { 
-                // removed cause the event should be sent also sent if something changes back to normal ... && this._root.data("new")!=this._root.data("original")) {
-                this.settings.valueChanged.apply(null);
-            }
-        }
-    
-    
-        
     
     
     }

@@ -26,7 +26,7 @@ namespace Ui_plugin_radio_gaga {
             customerSettingsPage: {
                 id: "U____projectsettings",
                 title: "U___ projectsettings page",
-                enabled: true,
+                enabled: false,
                 defaultSettings: {
                     myServerSetting: "default value for setting defined in Interfaces.ts",
                 },
@@ -40,7 +40,7 @@ namespace Ui_plugin_radio_gaga {
             projectSettingsPage: {
                 id: "U____projectsettings",
                 title:"U___ projectsettings page",
-                enabled: true,
+                enabled: false,
                 defaultSettings: {
                     myProjectSetting:  "default value for setting defined in Interfaces.ts",
                 },
@@ -52,7 +52,7 @@ namespace Ui_plugin_radio_gaga {
                 The tool itself is implemented in the _Tool.ts 
             */
             menuToolItem: {
-                enabled: true,
+                enabled: false,
                 title:"ui_plugin_radio_gaga-menuitem",
             },
             /*  Add a custom field to enter some data in the UI - set enabled to false if not needed.
@@ -88,7 +88,7 @@ namespace Ui_plugin_radio_gaga {
                 
                 id:"U___",
                 title: "U___ dashboard page",
-                enabled: true,
+                enabled: false,
                 icon: "fal fa-cog",
                 parent: "DASHBOARDS",
                 usefilter: true,

@@ -10,7 +10,7 @@ namespace Ui_plugin_radio_gaga  {
         fieldType?:string,
         fieldId?:number,
         valueChanged?: () => unknown, 
-        parameter?: IFieldParameter,
+        parameter?: IPluginUi_plugin_radio_gagaFieldParameter, /** @Francois: this should be this I think */
         fieldValue?:unknown, // value as stored in DB
         fieldValueJSON?:unknown, // same as json (if value is a JSON object)
         isItem?:boolean,
@@ -77,8 +77,7 @@ namespace Ui_plugin_radio_gaga  {
         defaultParameters: IPluginUi_plugin_radio_gagaFieldParameter,
         /**  description of  field  capabilities*/
         fieldConfigOptions: IFieldDescription,
-        /**  Default value when none is present */
-        defaultValue:unknown,
+        /* @francois removed this */
     }
 
 
