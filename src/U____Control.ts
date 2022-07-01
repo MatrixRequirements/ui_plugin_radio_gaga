@@ -112,7 +112,7 @@ namespace Ui_plugin_radio_gaga{
 
                 // readonly display //
 
-                $( Control.render(""+this.settings.fieldId, this.settings.parameter, this.originalValue, false, null)).appendTo( container );
+                $( Control.render(""+this.settings.fieldId, this.settings.parameter, this.originalValue, true, null)).appendTo( container );
             } else {
     
                 this.editor = $( Control.render(""+this.settings.fieldId, this.settings.parameter, this.originalValue, false, null)).appendTo( container ); // the actual UI
