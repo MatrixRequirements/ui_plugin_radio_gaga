@@ -3,7 +3,10 @@
 
 interface IPrintFieldParams {
     fieldInfo?: {
-        field?: unkown
+        field?: unkown,
+        jsonValue: {},
+        jsonConfig:{},
+        fieldId:string
     }
 }
 interface IPrintGlobals {}

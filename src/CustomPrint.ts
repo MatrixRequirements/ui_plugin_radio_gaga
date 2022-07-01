@@ -34,12 +34,23 @@ namespace Ui_plugin_radio_gaga {
                 onError( "called a field rendering function without passing a field");
                 return "";
             }
-            let field = paramsCaller.fieldInfo.field;
-
-            let checked = "TODO";
+            let config = <IPluginUi_plugin_radio_gagaFieldParameter>paramsCaller.fieldInfo.jsonConfig;
+            let value = <IGaga>paramsCaller.fieldInfo.jsonValue;
             
-            let rendered = `<span class='${params.class} ${PrintField.uid} ${checked?"checkboxOn":"checkboxOff"}'>`;
-            rendered += `<span class="fal ${checked?"fa-check":"fa-times"}"></span>&nbsp;<span class="checkboxText">${params.fieldInfo.config.attr("label")}</span>`;
+            if (!config || !config.options || !config.options.length) {
+                return `field ${paramsCaller.fieldInfo.fieldId} not (properly) configured.`;
+            }
+            if (!value) {
+                value = {id:""};
+            }
+
+            let rendered = `<span class='${params.class} ${PrintField.uid}'>`;
+            for (let option of config.options) {
+                let checked = option.id == value.id;
+                rendered += `<div><span class="fal ${checked?"fa-circle-dot":"fa-circle"}"></span>&nbsp;<span class="radioText">${option.text}</span><div>`;
+            }
+            
+            
             rendered += "</span>";
             return rendered;
         }
