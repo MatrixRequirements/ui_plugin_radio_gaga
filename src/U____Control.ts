@@ -58,11 +58,10 @@ namespace Ui_plugin_radio_gaga{
         /**  readonly printing for custom section, tooltip, zen or user without right to edit */
         static renderPrint(fieldId:string, options:IGagaOption[], selected:string, params:IPrintParams) {
             
-            
             let rendered = `<span class='${(params && params.class)?params.class:""} ${fieldId?fieldId:""}'>`;
             for (let option of options) {
                 let checked = option.id == selected;
-                rendered += `<div><span class="fal ${checked?"fa-check-circle":"fa-circle"}"></span>&nbsp;<span class="radioText">${option.text}</span><div>`;
+                rendered += `<div><span class="fal ${checked?"fa-check-circle":"fa-circle"}">${checked?"%nbsp;":""}</span>${checked?"":"%nbsp;"}<span class="radioText">${option.text}</span><div>`;
             }
             rendered += "</span>";
             return rendered;   
