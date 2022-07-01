@@ -21,6 +21,7 @@ namespace Ui_plugin_radio_gaga{
                 options:[{id:"l00",text:"first option"},{id:"l01",text:"second option"}]
             }
         };
+        
         // render the control with the current value
         createEditorFromDOM(currentValue:string, disabled:boolean): JQuery {
             if (this.settings.parameter.options.length == 0) {
@@ -34,7 +35,7 @@ namespace Ui_plugin_radio_gaga{
             for( let option of this.settings.parameter.options) {  
                 let checked = (option.id == currentValue)?"checked":"";
 
-                control.append(`<div><label><input type="radio" data-option="${option.id}" ${disabled?"disabled":""} id="${name+option.id}" name="${name}" ${checked}>${option.text}</label></div>`);            
+                control.append(`<div><label><input type="radio" data-option="${option.id}" ${disabled?"disabled":""} id="${name+option.id}" name="${name}" ${checked}> ${option.text}</label></div>`);            
             }
             return control;
         }
@@ -44,7 +45,7 @@ namespace Ui_plugin_radio_gaga{
         } 
         
        
-        init(  options:IControlOptions) {
+        init( options:IControlOptions ) {
             let that = this;
 
             // get (default) configuration + a field value
