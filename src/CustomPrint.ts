@@ -47,7 +47,7 @@ namespace Ui_plugin_radio_gaga {
             let rendered = `<span class='${params.class} ${PrintField.uid}'>`;
             for (let option of config.options) {
                 let checked = option.id == value.id;
-                rendered += `<div><span class="fal ${checked?"fa-circle-dot":"fa-circle"}"></span>&nbsp;<span class="radioText">${option.text}</span><div>`;
+                rendered += `<div><span class="fal ${checked?"fa-check-circle":"fa-circle"}"></span>&nbsp;<span class="radioText">${option.text}</span><div>`;
             }
             
             
