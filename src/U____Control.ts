@@ -1,10 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 namespace Ui_plugin_radio_gaga{
-
+    
    export class  Control extends BaseControl {
     
         private settings: IControlOptions;
-        private originalValue:string;
+        private originalValue:IGaga;
         private editor:JQuery;
        
         static defaultOptions:IControlOptions = {
@@ -22,23 +22,70 @@ namespace Ui_plugin_radio_gaga{
             }
         };
         
-        // render the control with the current value
-        createEditorFromDOM(currentValue:string, disabled:boolean): JQuery {
-            if (this.settings.parameter.options.length == 0) {
-                return $(`<div>No options defined<div> `);
+        /** this method renders the radio buttons with the current selection, either readonly or as control  */
+        static render(fieldId:string, config:IPluginUi_plugin_radio_gagaFieldParameter, value:IGaga, readOnly:boolean, params?:IPrintParams) {
+           
+            // get the options defining the radio buttons
+            let options:IGagaOption[] = null;
+            if (config && config.options) {
+                options=config.options;
+            } else if (Control.defaultOptions.parameter.options) {
+                options=Control.defaultOptions.parameter.options;
             }
-            let control = $(`<div>`);
+            
+            if (!options || options.length==0) {
+                return `field ${fieldId} is not (properly) configured: no options are defined.`;
+            }
+
+            // get the actual value / default value
+            let selected = "";
+            // check if there is a value / and if not if there is a default value
+            if (value) {
+                selected = value.id?value.id:"";
+            } else if (config.initialContent && config.initialContent.id) {
+                selected = value.id?value.id:"";
+            }
+
+            // do the rendering
+            if (readOnly) {
+                return this.renderPrint( fieldId, options, selected, params);
+            } else {
+                return this.renderEditor( fieldId, options, selected);
+            }
+
+        }
+
+        /**  readonly printing for custom section, tooltip, zen or user without right to edit */
+        static renderPrint(fieldId:string, options:IGagaOption[], selected:string, params:IPrintParams) {
+            
+            
+            let rendered = `<span class='${(params && params.class)?params.class:""} ${fieldId?fieldId:""}'>`;
+            for (let option of options) {
+                let checked = option.id == selected;
+                rendered += `<div><span class="fal ${checked?"fa-check-circle":"fa-circle"}"></span>&nbsp;<span class="radioText">${option.text}</span><div>`;
+            }
+            rendered += "</span>";
+            return rendered;   
+        }
+        /** interactive radio control */
+        static renderEditor(fieldId:string, options:IGagaOption[], selected:string ) {
+                 
+            let editor = "<div>";
+            editor += "</div>";
             // get the name for the radio
-            let name = "f" + this.settings.fieldId;
+            let name = "f" + fieldId;
         
             // render all the lines (currently in the setting)    
-            for( let option of this.settings.parameter.options) {  
-                let checked = (option.id == currentValue)?"checked":"";
+            for( let option of options) {  
+                let checked = (option.id == selected)?"checked":"";
 
-                control.append(`<div><label><input type="radio" data-option="${option.id}" ${disabled?"disabled":""} id="${name+option.id}" name="${name}" ${checked}> ${option.text}</label></div>`);            
+                editor += `<div><label><input type="radio" data-option="${option.id}" id="${name+option.id}" name="${name}" ${checked}> ${option.text}</label></div>`;            
             }
-            return control;
+            return editor;
+            
         }
+
+        
        
         constructor( control:JQuery) {
             super(control);
@@ -51,55 +98,54 @@ namespace Ui_plugin_radio_gaga{
             // get (default) configuration + a field value
             this.settings = <IControlOptions> ml.JSON.mergeOptions(Control.defaultOptions, options);
             
-            this.originalValue = "";
+            // if it has been saved before get the value - if not remember null
+            this.originalValue = this.settings.fieldValue? JSON.parse(this.settings.fieldValue):null;
 
-            // if it has been saved before get the value
-            if (this.settings.fieldValue && (<IGaga>JSON.parse(this.settings.fieldValue)).id) {
-                this.originalValue =  (<IGaga>JSON.parse(this.settings.fieldValue)).id;
-            }
-
-            // check if there's a default value which should be used
-            let currentValue =  this.originalValue;
-
-            // if there is no value saved, initialize it - if default is provided
-            if (!currentValue && this.settings.parameter.initialContent && this.settings.parameter.initialContent.id) {
-                currentValue = this.settings.parameter.initialContent.id;
-            }
-
-            // figure out if control should be editable
-            let disabled = false;
-            if ( // readonly display //
-                this.settings.controlState === ControlState.Print || this.settings.controlState === ControlState.Tooltip|| this.settings.controlState === ControlState.HistoryView 
-                || !this.settings.canEdit /* no rights to edit */
-                || this.settings.parameter.readonly /* disabled in admin*/ ) {
-                disabled = true;
-            }
-    
-            // render the control
+            // render the control header and the container for the control
             this._root.append( super.createHelp(this.settings)); // render name of 
             const container = $("<div class='baseControl'>").appendTo( this._root ); // create a container
-            this.editor = this.createEditorFromDOM(currentValue, disabled).appendTo( container ); // the actual UI
-            
-            // react on changes to the value. the ui will pass a call function which will enable/disable the save 
-            $('input', this.editor).change(function() {
-                that.settings.valueChanged.apply(null);
-            });
 
+            // figure out if control should be editable
+            if ( this.settings.controlState === ControlState.Print || this.settings.controlState === ControlState.Tooltip|| this.settings.controlState === ControlState.HistoryView 
+                || !this.settings.canEdit /* no rights to edit */
+                || this.settings.parameter.readonly /* disabled in admin*/ ) {
+
+                // readonly display //
+
+                $( Control.render(""+this.settings.fieldId, this.settings.parameter, this.originalValue, false, null)).appendTo( container );
+            } else {
+    
+                this.editor = $( Control.render(""+this.settings.fieldId, this.settings.parameter, this.originalValue, false, null)).appendTo( container ); // the actual UI
+                
+                // react on changes to the value. the ui will pass a call function which will enable/disable the save 
+                $('input', this.editor).change(function() {
+                    that.settings.valueChanged.apply(null);
+                });
+            }
         }
         
         /** this method is called by the UI to figure out if the control's value changed */
         hasChanged():boolean {
-           
-            let current = this.getValue();
-            
-            return  (<IGaga>JSON.parse(current)).id != this.originalValue;
+            if (this.editor) {
+                // read the value from the UI and parse it
+                let current =  JSON.parse(this.getValue());
+                // there was no value stored before || it changed
+                return  !this.originalValue || current.id != this.originalValue.id;
+    
+            } else {
+                return false;
+            }
         }
         
         /** this method is called by the UI to retrieve the string to be saved in the database */
         getValue():string {
-            let checked = $('input:checked', this.editor).data("option");
-            let current = <IGaga>{ id:checked };
-            return JSON.stringify(current);
+            if (this.editor) {
+                let checked = $('input:checked', this.editor).data("option");
+                let current = <IGaga>{ id:checked };
+                return JSON.stringify(current);
+            } else {
+                return this.settings.fieldValue;
+            }
         }
     
         refresh() {

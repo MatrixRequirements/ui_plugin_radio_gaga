@@ -59,5 +59,12 @@ namespace Ui_plugin_radio_gaga {
         id: string;
     }
 
-  
+    /** this allows to store parameters for printing 
+    * 
+    * This parameters can be overwritten in the layout and are used by the custom section printing
+    */
+    export interface IPrintParams extends IPrintFieldParams {
+        class:string // default:"". additional class for outermost container
+    }
+
 }

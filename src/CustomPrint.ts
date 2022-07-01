@@ -2,13 +2,7 @@
 
 // eslint-disable-next-line no-unused-vars
 namespace Ui_plugin_radio_gaga {
-
-
-    interface IPrintParams extends IPrintFieldParams {
-        class:string // default:"". additional class for outermost container
-    }
-
-
+  
     class PrintField implements IPrintFunction {
         static uid = PrintProcessor.getFieldFunctionId(Plugin.config.field.fieldType);
 
@@ -37,22 +31,7 @@ namespace Ui_plugin_radio_gaga {
             let config = <IPluginUi_plugin_radio_gagaFieldParameter>paramsCaller.fieldInfo.jsonConfig;
             let value = <IGaga>paramsCaller.fieldInfo.jsonValue;
             
-            if (!config || !config.options || !config.options.length) {
-                return `field ${paramsCaller.fieldInfo.fieldId} not (properly) configured.`;
-            }
-            if (!value) {
-                value = {id:""};
-            }
-
-            let rendered = `<span class='${params.class} ${PrintField.uid}'>`;
-            for (let option of config.options) {
-                let checked = option.id == value.id;
-                rendered += `<div><span class="fal ${checked?"fa-check-circle":"fa-circle"}"></span>&nbsp;<span class="radioText">${option.text}</span><div>`;
-            }
-            
-            
-            rendered += "</span>";
-            return rendered;
+            return Control.render( paramsCaller.fieldInfo.field.id, config, value, true, params );
         }
     }
 
