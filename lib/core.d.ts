@@ -8,7 +8,7 @@ interface IPrintFieldParams {
 }
 interface IPrintGlobals {}
 
-declare var PrintProcessor: unkonwn;
+declare var PrintProcessor: any;
 
 /// <reference path="../../ts/tinymce.d.ts" />
 /// <reference path="../../js/vendor/gridstack_3.2.0/dist/gridstack.d.ts" />

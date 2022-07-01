@@ -10,7 +10,7 @@ namespace Ui_plugin_radio_gaga {
 
 
     class PrintField implements IPrintFunction {
-        static uid = PrintProcessor.getFieldFunctionId(Plugin.config.field.id);
+        static uid = PrintProcessor.getFieldFunctionId(Plugin.config.field.fieldType);
 
         getGroup() { return PrintProcessor.FIELD_FUNCTION_TYPE }
 
