@@ -61,7 +61,11 @@ namespace Ui_plugin_radio_gaga{
             let rendered = `<span class='${(params && params.class)?params.class:""} ${fieldId?fieldId:""}'>`;
             for (let option of options) {
                 let checked = option.id == selected;
-                rendered += `<div><span class="fal ${checked?"fa-check-circle":"fa-circle"}">${checked?"%nbsp;":""}</span>${checked?"":"%nbsp;"}<span class="radioText">${option.text}</span><div>`;
+
+                let left = checked?"&nbsp;":""; // history compare needs text changes -> move the space in/out of span
+                let right = checked?"":"&nbsp;"; // history compare needs text changes -> move the space in/out of span
+                
+                rendered += `<div><span class="fal ${checked?"fa-check-circle":"fa-circle"}">${left}</span>${right}<span class="radioText">${option.text}</span><div>`;
             }
             rendered += "</span>";
             return rendered;   
