@@ -30,7 +30,8 @@ module.exports = {
     "@typescript-eslint/no-empty-function":["error",  { 'allow': ["arrowFunctions"] }],
     "no-self-assign":"off", // allow stuff like window.location.href = window.location.href,
     "prefer-const":"off",
-    "no-empty":"off"
+    "no-empty":"off",
+    "@typescript-eslint/no-empty-interface":"off"
   }
 
 

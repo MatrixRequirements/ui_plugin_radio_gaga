@@ -54,7 +54,7 @@ namespace Ui_plugin_radio_gaga {
     * This defines the value of the control as stored in the database
     */
 
-    export interface IGaga extends IFieldParameter {
+    export interface IGaga extends IFieldValue {
         /** id of the selected option - if any */
         id: string;
     }

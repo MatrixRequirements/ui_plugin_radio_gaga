@@ -1,30 +1,11 @@
 // eslint-disable-next-line no-unused-vars
 namespace Ui_plugin_radio_gaga  {
     
-    /** this is info delivered by the UI when rendering the control */
-    export interface IControlOptions extends IBaseControlOptions{
-        placeholder:string
-        controlState?:ControlState, 
-        canEdit?: boolean, 
-        help?: string,
-        fieldType?:string,
-        fieldId?:number,
-        valueChanged?: () => unknown, 
-        parameter?: IPluginUi_plugin_radio_gagaFieldParameter, /** @Francois: this should be this I think */
-        fieldValue?:string, // value as stored in DB
-        isItem?:boolean,
-        item?:IItem,
-        isForm?:boolean,
-        isPrint?:boolean,
-        isTooltip?:boolean,
-        id?:string,
-        isHistory?:number, // version shown (if known)
-        type?:string,
-        isFolder?:boolean,
-    }
+    /** base interface for field value */
+    export interface IFieldValue { /* e,pty by design */ }
     
-     /** Description of the current plugin. Each feature can be activated/deactivated using the configuration object */
-     export interface IPluginConfig {
+    /** Description of the current plugin. Each feature can be activated/deactivated using the configuration object */
+    export interface IPluginConfig {
         /** Field. This will add a new field type that can be used for data rendering in the main app */
         field: IPluginFeatureField ,
         /** Menu tool item. This will add a new menu item in the tools menu  in the main app.*/
@@ -154,7 +135,7 @@ namespace Ui_plugin_radio_gaga  {
         // this method calls the content of the Control function
         createControl(ctrlObj: JQuery, settings: IBaseControlOptions) {
             if (settings && settings.fieldType == Plugin.config.field.fieldType &&  Plugin.config.field.enabled){
-                const baseControl = new Control(ctrlObj);
+                const baseControl = new ControlCore(ctrlObj);
                 ctrlObj.getController = () => {
                     return baseControl;
                 };
@@ -168,7 +149,11 @@ namespace Ui_plugin_radio_gaga  {
             ];
         }
 
-     
+        initPrinting() {
+            if ( Plugin.config.field.enabled ) {
+                PrintProcessor.addFunction(  PrintProcessor.getFieldFunctionId(Plugin.config.field.fieldType), new ControlCore() );
+            }
+        }
 
         // ------------------------------------------------ project setting page ------------------------------------------------
         protected enableProjectSetting() {
