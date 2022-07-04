@@ -135,7 +135,7 @@ namespace Ui_plugin_radio_gaga  {
         // this method calls the content of the Control function
         createControl(ctrlObj: JQuery, settings: IBaseControlOptions) {
             if (settings && settings.fieldType == Plugin.config.field.fieldType &&  Plugin.config.field.enabled){
-                const baseControl = new ControlCore(ctrlObj);
+                const baseControl = new U___Control(ctrlObj);
                 ctrlObj.getController = () => {
                     return baseControl;
                 };

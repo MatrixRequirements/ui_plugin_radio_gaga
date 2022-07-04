@@ -3,7 +3,7 @@
 // eslint-disable-next-line no-unused-vars
 namespace Ui_plugin_radio_gaga{
     
-   export class  U___Control extends ControlCore {
+    export class  U___Control extends ControlCore {
     
         /** an example / default configuration of a radio button list with two buttons */
         protected controlConfig : IPluginUi_plugin_radio_gagaFieldParameter = {
