@@ -44,9 +44,7 @@ namespace Ui_plugin_radio_gaga{
         };
         
         constructor( control?:JQuery) {
-            if (control) {
-                super(control);
-            }
+            super(control?control:$("<div>"));
         } 
         
        
@@ -120,9 +118,6 @@ namespace Ui_plugin_radio_gaga{
            console.log("resizeItem has been called");
         }
     
-    
-
-
 
 
         /** CUSTOM SECTION  */
