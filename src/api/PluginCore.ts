@@ -91,6 +91,7 @@ namespace Ui_plugin_radio_gaga  {
 
         constructor() {
             console.debug(`Constructing ${Plugin.PLUGIN_NAME}`);
+            this.initPrinting();
         }
 
         // ------------------------------------------------ initialization calls  ------------------------------------------------    
@@ -151,7 +152,7 @@ namespace Ui_plugin_radio_gaga  {
 
         initPrinting() {
             if ( Plugin.config.field.enabled ) {
-                PrintProcessor.addFunction(  PrintProcessor.getFieldFunctionId(Plugin.config.field.fieldType), new ControlCore() );
+                PrintProcessor.addFunction(  PrintProcessor.getFieldFunctionId(Plugin.config.field.fieldType), new U___Control() );
             }
         }
 

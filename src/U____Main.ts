@@ -138,7 +138,5 @@ namespace Ui_plugin_radio_gaga {
 
 // Register the plugin
 $(function () {
-    let plugin = new Ui_plugin_radio_gaga.Plugin();
-    plugins.register(plugin);
-    plugin.initPrinting();
+    plugins.register(new Ui_plugin_radio_gaga.Plugin());
 });
