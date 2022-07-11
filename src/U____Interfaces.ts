@@ -30,7 +30,6 @@ namespace Ui_plugin_radio_gaga {
     * These allow a user to add parameters to custom field defined by the plugin
     * each time it is added to a category
     */
-
     export interface IPluginUi_plugin_radio_gagaFieldParameter extends IFieldParameter {
 
         /** the definition of each line */

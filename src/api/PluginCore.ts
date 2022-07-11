@@ -2,7 +2,7 @@
 namespace Ui_plugin_radio_gaga  {
     
     /** base interface for field value */
-    export interface IFieldValue { /* e,pty by design */ }
+    export interface IFieldValue { /* empty by design */ }
     
     /** Description of the current plugin. Each feature can be activated/deactivated using the configuration object */
     export interface IPluginConfig {
@@ -54,8 +54,7 @@ namespace Ui_plugin_radio_gaga  {
         /**  Field type id that will be use when rendering the data */
         fieldType: string,
         /**  description of  field  capabilities*/
-        fieldConfigOptions: IFieldDescription,
-        /* @francois removed this */
+        fieldConfigOptions: IFieldDescription
     }
 
 
