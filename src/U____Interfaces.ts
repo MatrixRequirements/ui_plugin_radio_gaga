@@ -43,7 +43,7 @@ namespace Ui_plugin_radio_gaga {
     export interface IGagaOption  {
         /**  id of the line should be 'l' and 2 digit number l00, l01, l02 */
         id: string;
-        /**  display text in UI / documents*/
+        /**  display text in UI / documents */
         text: string;
     }
 
@@ -56,6 +56,8 @@ namespace Ui_plugin_radio_gaga {
     export interface IGaga extends IFieldValue {
         /** id of the selected option - if any */
         id: string;
+        /** html for rendering in documents using xslt */
+        html: string;
     }
 
     /** this allows to store parameters for printing 

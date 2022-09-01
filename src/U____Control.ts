@@ -5,6 +5,7 @@ namespace Ui_plugin_radio_gaga{
     
     export class  U___Control extends ControlCore {
     
+        private options:IGagaOption[] = null;
         /** an example / default configuration of a radio button list with two buttons */
         protected controlConfig : IPluginUi_plugin_radio_gagaFieldParameter = {
             options:[{id:"l00",text:"first option"},{id:"l01",text:"second option"}]
@@ -20,15 +21,14 @@ namespace Ui_plugin_radio_gaga{
             let config = <IPluginUi_plugin_radio_gagaFieldParameter>this.settings.parameter;
 
             // here, we get the options defining the radio buttons
-            let options:IGagaOption[] = null;
             if (config && config.options) {
                 // something has been saved, we take that
-                options=config.options;
+                this.options=config.options;
             } else if (this.controlConfig) {
-                options=this.controlConfig.options;
+                this.options=this.controlConfig.options;
             }
             
-            if (!options || options.length==0) {
+            if (!this.options || this.options.length==0) {
                 return `field ${this.settings.fieldId} is not (properly) configured: no options are defined.`;
             }
 
@@ -45,9 +45,9 @@ namespace Ui_plugin_radio_gaga{
 
             // do the rendering
             if (readOnly) {
-                return this.renderPrint( "" + this.settings.fieldId, selected, options,  params);
+                return this.renderPrint( "" + this.settings.fieldId, selected, this.options,  params);
             } else {
-                return this.renderEditor( "" + this.settings.fieldId,selected, options);
+                return this.renderEditor( "" + this.settings.fieldId,selected, this.options);
             }
 
         }
@@ -81,7 +81,7 @@ namespace Ui_plugin_radio_gaga{
             if (this.editor) {
                 // convert the displayed value to a JSON string
                 let checked = $('input:checked', this.editor).data("option");
-                let current = <IGaga>{ id:checked };
+                let current = <IGaga>{ id:checked, html: this.renderPrint( "" + this.settings.fieldId, checked, this.options, null) };
                 return JSON.stringify(current);
             } else {
                 // nothing changed so we return exactly the same thing saved in the database
