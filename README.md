@@ -2,15 +2,7 @@
 
 ![Plugin Build](https://github.com/MatrixRequirements/ui_plugin_radio_gaga/actions/workflows/main.yml/badge.svg)
 
-Matrix UI Plugins are implementations of the IPlugin interface.
-They can be registered in the plugin manager at startup and will be queried
-in different situations, for example to add new UI Controls or entries to 
-the tree or pages in the adminConfig.
-
-This  example registers a new Dashboard, a control, an action in the action menu, a config page on the project level and a config page at the serverSetting level. You can use this project as template for other plugin. 
-
-It can be compiled using the standard
-Typescript build process into a single JS file and loaded into Matrix.
+plugin adding a radio button control which can be printed field name is : ui_plugin_radio_gaga
 
 
 ## Installation
