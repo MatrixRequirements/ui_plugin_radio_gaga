@@ -150,8 +150,8 @@ namespace Ui_plugin_radio_gaga  {
         }
 
         initPrinting() {
-            /* add the function unless in admin client */
-            if ( Plugin.config.field.enabled && PrintProcessor) {
+            /* add the function unless in admin client where PrintProcessor is undefined*/
+            if ( Plugin.config.field.enabled && typeof(PrintProcessor) != "undefined") {
                 PrintProcessor.addFunction(  PrintProcessor.getFieldFunctionId(Plugin.config.field.fieldType), new U___Control() );
             }
         }
